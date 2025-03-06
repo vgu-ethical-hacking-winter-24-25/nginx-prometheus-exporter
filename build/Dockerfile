@@ -17,8 +17,7 @@ RUN CGO_ENABLED=0 GOOS=linux GOARCH=$TARGETARCH go build -trimpath -a -ldflags "
 
 FROM --platform=$BUILDPLATFORM alpine:3.21 AS certs
 
-FROM alpine:3.21 AS base
-RUN apk add --no-cache curl
+FROM scratch AS base
 COPY --from=certs --link /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 USER 1001:1001
 ENTRYPOINT [ "/usr/bin/nginx-prometheus-exporter" ]
